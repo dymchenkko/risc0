@@ -497,7 +497,7 @@ pub fn embed_methods_with_options(mut guest_pkg_to_options: HashMap<&str, GuestO
             .remove(guest_pkg.name.as_str())
             .unwrap_or_default();
 
-        test_guest_packages(
+        test_guest_package(
             &guest_pkg,
             &out_dir.join("riscv-guest"),
             &guest_build_env,
