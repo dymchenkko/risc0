@@ -375,6 +375,88 @@ fn build_guest_package<P>(
     }
 }
 
+fn test_guest_package<P>(
+    pkg: &Package,
+    target_dir: P,
+    guest_build_env: &GuestBuildEnv,
+    features: Vec<String>,
+) where
+    P: AsRef<Path>,
+{
+    fs::create_dir_all(target_dir.as_ref()).unwrap();
+    let cargo = env::var("CARGO").unwrap();
+    let mut args = vec![
+        "test",
+        guest_build_env.target_spec.to_str().unwrap(),
+        "-Z",
+        "build-std=core,alloc,std,proc_macro,panic_abort",
+        "-Z",
+        "build-std-features=compiler-builtins-mem",
+        "--manifest-path",
+        pkg.manifest_path.as_str(),
+        "--target-dir",
+        target_dir.as_ref().to_str().unwrap(),
+    ];
+    let features_str = features.join(",");
+    if !features.is_empty() {
+        args.push("--features");
+        args.push(&features_str);
+    }
+    println!("Testing guest package: {cargo} {}", args.join(" "));
+    // The RISC0_STANDARD_LIB variable can be set for testing purposes
+    // to override the downloaded standard library.  It should point
+    // to the root of the rust repository.
+    let risc0_standard_lib: String = if let Ok(path) = env::var("RISC0_STANDARD_LIB") {
+        path
+    } else {
+        guest_build_env.rust_lib_src.to_str().unwrap().into()
+    };
+
+    println!("Using rust standard library root: {}", risc0_standard_lib);
+
+    let mut cmd = Command::new(cargo);
+    let mut child = cmd
+        .env("CARGO_ENCODED_RUSTFLAGS", "-C\x1fpasses=loweratomic")
+        .env("__CARGO_TESTS_ONLY_SRC_ROOT", risc0_standard_lib)
+        .args(args)
+        .stderr(Stdio::piped())
+        .spawn()
+        .unwrap();
+    let stderr = child.stderr.take().unwrap();
+
+    // HACK: Attempt to bypass the parent cargo output capture and
+    // send directly to the tty, if available.  This way we get
+    // progress messages from the inner cargo so the user doesn't
+    // think it's just hanging.
+    let mut tty = fs::OpenOptions::new()
+        .read(true)
+        .write(true)
+        .open("/dev/tty")
+        .ok();
+
+    if let Some(tty) = &mut tty {
+        write!(
+            tty,
+            "{}: Starting test for riscv32im-risc0-zkvm-elf   \n",
+            pkg.name
+        )
+        .unwrap();
+    }
+
+    for line in BufReader::new(stderr).lines() {
+        match &mut tty {
+            Some(tty) => write!(tty, "{}: {}   \n", pkg.name, line.unwrap()).unwrap(),
+            None => eprintln!("{}", line.unwrap()),
+        }
+    }
+
+    let status = cmd.status().unwrap();
+
+    if !status.success() {
+        std::process::exit(status.code().unwrap());
+    }
+}
+
 /// Options defining how to embed a guest package in
 /// [`embed_methods_with_options`].
 pub struct GuestOptions {
@@ -415,7 +497,7 @@ pub fn embed_methods_with_options(mut guest_pkg_to_options: HashMap<&str, GuestO
             .remove(guest_pkg.name.as_str())
             .unwrap_or_default();
 
-        build_guest_package(
+        test_guest_packages(
             &guest_pkg,
             &out_dir.join("riscv-guest"),
             &guest_build_env,
