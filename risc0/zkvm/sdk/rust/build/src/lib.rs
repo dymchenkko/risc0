@@ -425,14 +425,6 @@ fn test_guest_package<P>(
             "target/build/r0vm",
         )
         .args(args)
-        .arg("--elf")
-            .arg("/home/dymchenko/risc0-rust-starter/target/debug/build/methods-8f2f69d7d5e61350/out/riscv-guest/riscv32im-risc0-zkvm-elf/release/multiply")
-            .arg("--method-id")
-            .arg("/tmp/.tmpYnrLWR/method_id.dat")
-            .arg("--receipt")
-            .arg("/tmp/.tmpYnrLWR/receipt.dat")
-            .arg("--skip-seal")
-            .arg("false")
         .stderr(Stdio::piped())
         .spawn()
         .unwrap();
