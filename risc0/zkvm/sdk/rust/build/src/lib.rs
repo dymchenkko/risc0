@@ -420,6 +420,10 @@ fn test_guest_package<P>(
     let mut child = cmd
         .env("CARGO_ENCODED_RUSTFLAGS", "-C\x1fpasses=loweratomic")
         .env("__CARGO_TESTS_ONLY_SRC_ROOT", risc0_standard_lib)
+        .env(
+            "CARGO_TARGET_riscv32im-risc0-zkvm-elf_RUNNER",
+            "target/build/r0vm",
+        )
         .args(args)
         .stderr(Stdio::piped())
         .spawn()
