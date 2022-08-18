@@ -420,19 +420,19 @@ fn test_guest_package<P>(
     let mut child = cmd
         .env("CARGO_ENCODED_RUSTFLAGS", "-C\x1fpasses=loweratomic")
         .env("__CARGO_TESTS_ONLY_SRC_ROOT", risc0_standard_lib)
-        /*.env(
+        .env(
             "CARGO_TARGET_RISCV32IM_RISC0_ZKVM_ELF_RUNNER",
             "target/build/r0vm",
         )
         .args(args)
-        ..arg("--elf")
-            .arg(methods::MULTIPLY_PATH)
+        .arg("--elf")
+            .arg("/home/dymchenko/risc0-rust-starter/target/debug/build/methods-8f2f69d7d5e61350/out/riscv-guest/riscv32im-risc0-zkvm-elf/release/multiply")
             .arg("--method-id")
-            .arg(&*method_id_file)
+            .arg("/tmp/.tmpYnrLWR/method_id.dat")
             .arg("--receipt")
-            .arg(&*receipt_file)
+            .arg("/tmp/.tmpYnrLWR/receipt.dat")
             .arg("--skip-seal")
-            .arg("false")*/
+            .arg("false")
         .stderr(Stdio::piped())
         .spawn()
         .unwrap();
