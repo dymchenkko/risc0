@@ -420,7 +420,7 @@ fn test_guest_package<P>(
     let mut child = cmd
         .env("CARGO_ENCODED_RUSTFLAGS", "-C\x1fpasses=loweratomic")
         .env("__CARGO_TESTS_ONLY_SRC_ROOT", risc0_standard_lib)
-        .env(
+        /*.env(
             "CARGO_TARGET_RISCV32IM_RISC0_ZKVM_ELF_RUNNER",
             "target/build/r0vm",
         )
@@ -432,10 +432,10 @@ fn test_guest_package<P>(
             .arg("--receipt")
             .arg(&*receipt_file)
             .arg("--skip-seal")
-            .arg("false")
-            .stderr(Stdio::piped())
-            .spawn()
-            .unwrap();
+            .arg("false")*/
+        .stderr(Stdio::piped())
+        .spawn()
+        .unwrap();
     let stderr = child.stderr.take().unwrap();
 
     // HACK: Attempt to bypass the parent cargo output capture and
