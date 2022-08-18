@@ -302,7 +302,7 @@ fn build_guest_package<P>(
     fs::create_dir_all(target_dir.as_ref()).unwrap();
     let cargo = env::var("CARGO").unwrap();
     let mut args = vec![
-        "build",
+        "test",
         "--release",
         "--target",
         guest_build_env.target_spec.to_str().unwrap(),

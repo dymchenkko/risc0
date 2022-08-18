@@ -71,6 +71,7 @@ fn stdio_outputs_in_receipt_without_seal() -> Result<()> {
     let temp = TempDir::new().unwrap();
     let receipt_file = temp.child("receipt.dat");
     let method_id_file = temp.child("method_id.dat");
+
     std::fs::write(&method_id_file, risc0_zkvm_methods::STANDARD_LIB_ID).unwrap();
 
     let mut cmd = Command::cargo_bin("r0vm")?;
