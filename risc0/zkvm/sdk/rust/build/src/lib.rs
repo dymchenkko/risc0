@@ -427,9 +427,11 @@ fn test_guest_package<P>(
         )
         .args(args)
         .stderr(Stdio::piped())
+        .stdout(Stdio::piped())
         .spawn()
         .unwrap();
     let stderr = child.stderr.take().unwrap();
+    let stdout = child.stdout.take().unwrap();
 
     // HACK: Attempt to bypass the parent cargo output capture and
     // send directly to the tty, if available.  This way we get
@@ -451,6 +453,13 @@ fn test_guest_package<P>(
     }
 
     for line in BufReader::new(stderr).lines() {
+        match &mut tty {
+            Some(tty) => write!(tty, "{}: {}   \n", pkg.name, line.unwrap()).unwrap(),
+            None => eprintln!("{}", line.unwrap()),
+        }
+    }
+
+    for line in BufReader::new(stdout).lines() {
         match &mut tty {
             Some(tty) => write!(tty, "{}: {}   \n", pkg.name, line.unwrap()).unwrap(),
             None => eprintln!("{}", line.unwrap()),
