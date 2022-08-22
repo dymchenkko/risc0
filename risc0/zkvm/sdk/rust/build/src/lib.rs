@@ -445,7 +445,7 @@ fn test_guest_package<P>(
         .env("__CARGO_TESTS_ONLY_SRC_ROOT", risc0_standard_lib)
         .env(
             "CARGO_TARGET_RISCV32IM_RISC0_ZKVM_ELF_RUNNER",
-            "/home/dymchenko/risc0-rust-starter/r0vm/bin/r0vm --elf /home/dymchenko/risc0-rust-starter/target/debug/build/methods-5e520fc192c17dfb/out/riscv-guest/riscv32im-risc0-zkvm-elf/release/multiply --method-id",
+            "/home/dymchenko/risc0-rust-starter/r0vm/bin/r0vm --elf /home/dymchenko/risc0-rust-starter/target/debug/build/methods-5e520fc192c17dfb/out/riscv-guest/riscv32im-risc0-zkvm-elf/release/multiply --method-id /tmp/.tmpR9Iv07/method_id.dat --receipt /tmp/.tmpR9Iv07/receipt.dat",
         )
         .args(args)
         .stderr(Stdio::piped())
