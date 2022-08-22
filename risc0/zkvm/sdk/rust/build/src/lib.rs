@@ -25,7 +25,6 @@ use std::{
     process::{Command, Stdio},
 };
 
-use assert_fs::{fixture::PathChild, TempDir};
 use cargo_metadata::{MetadataCommand, Package};
 use risc0_zkvm::host::{MethodId, DEFAULT_METHOD_ID_LIMIT};
 use risc0_zkvm_platform_sys::LINKER_SCRIPT;
@@ -416,10 +415,6 @@ fn test_guest_package<P>(
     };
 
     println!("Using rust standard library root: {}", risc0_standard_lib);
-
-    let temp = TempDir::new().unwrap();
-    let receipt_file = temp.child("receipt.dat");
-    let method_id_file = temp.child("method_id.dat");
 
     let mut cmd = Command::new(cargo);
     let mut child = cmd
