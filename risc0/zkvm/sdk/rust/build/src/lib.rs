@@ -422,7 +422,7 @@ fn test_guest_package<P>(
         .env("__CARGO_TESTS_ONLY_SRC_ROOT", risc0_standard_lib)
         .env(
             "CARGO_TARGET_RISCV32IM_RISC0_ZKVM_ELF_RUNNER",
-            "/home/dymchenko/r0vm/bin/r0vm --elf",
+            "/home/dymchenko/risc0-rust-starter/r0vm/bin/r0vm",
         )
         .args(args)
         .stderr(Stdio::piped())
