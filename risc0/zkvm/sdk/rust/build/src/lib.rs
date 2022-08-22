@@ -422,7 +422,7 @@ fn test_guest_package<P>(
         .env("__CARGO_TESTS_ONLY_SRC_ROOT", risc0_standard_lib)
         .env(
             "CARGO_TARGET_RISCV32IM_RISC0_ZKVM_ELF_RUNNER",
-            "/bin/test-this --elf",
+            "/home/dymchenko/r0vm/bin/r0vm --elf",
         )
         .args(args)
         .stderr(Stdio::piped())
