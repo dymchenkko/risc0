@@ -390,6 +390,8 @@ fn test_guest_package<P>(
         "test",
         "--release",
         "--target",
+        "--verbose",
+        "--verbose",
         guest_build_env.target_spec.to_str().unwrap(),
         "-Z",
         "build-std=core,alloc,std,proc_macro,panic_abort",
