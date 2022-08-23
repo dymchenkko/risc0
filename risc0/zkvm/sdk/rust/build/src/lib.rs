@@ -399,8 +399,8 @@ fn test_guest_package<P>(
         pkg.manifest_path.as_str(),
         "--target-dir",
         target_dir.as_ref().to_str().unwrap(),
-        "--"
-        "--nocapture"
+        "--",
+        "--nocapture",
     ];
     let features_str = features.join(",");
     if !features.is_empty() {
