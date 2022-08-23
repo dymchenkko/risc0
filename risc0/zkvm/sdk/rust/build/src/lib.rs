@@ -390,7 +390,6 @@ fn test_guest_package<P>(
         "test",
         "--",
         "---nocapture",
-        "--release",
         "--target",
         guest_build_env.target_spec.to_str().unwrap(),
         "-Z",
