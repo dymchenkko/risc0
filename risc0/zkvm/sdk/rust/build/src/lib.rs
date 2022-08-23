@@ -391,6 +391,8 @@ fn test_guest_package<P>(
         "--release",
         "--target",
         guest_build_env.target_spec.to_str().unwrap(),
+        "--",
+        "--nocapture",
         "-Z",
         "build-std=core,alloc,std,proc_macro,panic_abort",
         "-Z",
@@ -399,7 +401,6 @@ fn test_guest_package<P>(
         pkg.manifest_path.as_str(),
         "--target-dir",
         target_dir.as_ref().to_str().unwrap(),
-        "-- --nocapture",
     ];
     let features_str = features.join(",");
     if !features.is_empty() {
