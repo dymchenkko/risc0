@@ -388,8 +388,7 @@ fn test_guest_package<P>(
     let cargo = env::var("CARGO").unwrap();
     let mut args = vec![
         "test",
-        "--",
-        "---nocapture",
+        "--release",
         "--target",
         guest_build_env.target_spec.to_str().unwrap(),
         "-Z",
