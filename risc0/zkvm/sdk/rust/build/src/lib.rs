@@ -388,10 +388,10 @@ fn test_guest_package<P>(
     let cargo = env::var("CARGO").unwrap();
     let mut args = vec![
         "test",
+        "--verbose",
+        "--verbose",
         "--release",
         "--target",
-        "--verbose",
-        "--verbose",
         guest_build_env.target_spec.to_str().unwrap(),
         "-Z",
         "build-std=core,alloc,std,proc_macro,panic_abort",
