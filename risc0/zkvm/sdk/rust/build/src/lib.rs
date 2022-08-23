@@ -391,8 +391,6 @@ fn test_guest_package<P>(
         "--release",
         "--target",
         guest_build_env.target_spec.to_str().unwrap(),
-        "--",
-        "--nocapture",
         "-Z",
         "build-std=core,alloc,std,proc_macro,panic_abort",
         "-Z",
