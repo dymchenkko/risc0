@@ -499,6 +499,8 @@ pub struct GuestOptions {
 
     /// Features for cargo to build the guest with.
     pub features: Vec<String>,
+
+    pub test_mode: bool,
 }
 
 pub struct TestGuestOptions {
@@ -557,7 +559,7 @@ impl Options for TestGuestOptions {
 /// Embeds methods built for RISC-V for use by host-side dependencies.
 /// Specify custom options for a guest package by defining its [GuestOptions].
 /// See [embed_methods].
-pub fn embed_methods_with_options(mut guest_pkg_to_options: HashMap<&str, Box<dyn Options>>) {
+pub fn embed_methods_with_options(mut guest_pkg_to_options: HashMap<&str, GuestOptions>) {
     let out_dir_env = env::var_os("OUT_DIR").unwrap();
     let out_dir = Path::new(&out_dir_env);
 
@@ -571,12 +573,11 @@ pub fn embed_methods_with_options(mut guest_pkg_to_options: HashMap<&str, Box<dy
     for guest_pkg in guest_packages {
         println!("Building guest package {}.{}", pkg.name, guest_pkg.name);
 
-        let guest_options: Box<dyn Options> = guest_pkg_to_options
+        let guest_options = guest_pkg_to_options
             .remove(guest_pkg.name.as_str())
-            .unwrap();
+            .unwrap_or_default();
 
-        match guest_options.as_any().downcast_ref::<TestGuestOptions>() {
-            Some(_) => {
+        if guest_options.test_mode {
                 test_guest_package(
                     &guest_pkg,
                     &out_dir.join("riscv-guest"),
@@ -584,7 +585,7 @@ pub fn embed_methods_with_options(mut guest_pkg_to_options: HashMap<&str, Box<dy
                     guest_options.features(),
                 );
             }
-            None => {
+        else {
                 build_guest_package(
                     &guest_pkg,
                     &out_dir.join("riscv-guest"),
