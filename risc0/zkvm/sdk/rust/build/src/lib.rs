@@ -488,7 +488,7 @@ fn test_guest_package<P>(
 /// Options defining how to embed a guest package in
 /// [`embed_methods_with_options`].
 
-pub trait Options: Any, Default {
+pub trait Options: Any + Default {
     fn code_limit(&self) -> u32;
     fn features(&self) -> Vec<String>;
     fn as_any(&self) -> &dyn Any;
