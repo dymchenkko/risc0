@@ -488,10 +488,11 @@ fn test_guest_package<P>(
 /// Options defining how to embed a guest package in
 /// [`embed_methods_with_options`].
 
-pub trait Options: Any {
+pub trait Options: Any, Default {
     fn code_limit(&self) -> u32;
     fn features(&self) -> Vec<String>;
     fn as_any(&self) -> &dyn Any;
+    fn default() -> Self;
 }
 pub struct GuestOptions {
     /// The number of po2 entries to generate in the MethodID.
@@ -539,6 +540,13 @@ impl Options for GuestOptions {
     fn as_any(&self) -> &dyn Any {
         self
     }
+
+    fn default() -> Self {
+        GuestOptions {
+            code_limit: DEFAULT_METHOD_ID_LIMIT,
+            features: vec![],
+        }
+    }
 }
 impl Options for TestGuestOptions {
     fn code_limit(&self) -> u32 {
@@ -551,6 +559,13 @@ impl Options for TestGuestOptions {
 
     fn as_any(&self) -> &dyn Any {
         self
+    }
+
+    fn default() -> Self {
+        TestGuestOptions {
+            code_limit: DEFAULT_METHOD_ID_LIMIT,
+            features: vec![],
+        }
     }
 }
 
