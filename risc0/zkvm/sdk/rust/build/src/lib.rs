@@ -402,12 +402,17 @@ fn test_guest_package<P>(
         "--target-dir",
         target_dir.as_ref().to_str().unwrap(),
     ];
+    let mut args2 = vec![
+        "install",
+        "--root=",
+        target_dir.as_ref().to_str().unwrap().to_owned() + "/r0vm risc0-r0vm",
+    ];
     let features_str = features.join(",");
     if !features.is_empty() {
         args.push("--features");
         args.push(&features_str);
     }
-    println!("Building guest package: {cargo} {}", args.join(" "));
+    println!("Testing guest package: {cargo} {}", args.join(" "));
     // The RISC0_STANDARD_LIB variable can be set for testing purposes
     // to override the downloaded standard library.  It should point
     // to the root of the rust repository.
@@ -427,6 +432,7 @@ fn test_guest_package<P>(
             "CARGO_TARGET_RISCV32IM_RISC0_ZKVM_ELF_RUNNER",
             target_dir.as_ref().to_str().unwrap().to_owned() + "/r0vm/bin/r0vm --skip-seal --elf",
         )
+        .args(args2)
         .args(args)
         .stderr(Stdio::piped())
         .stdout(Stdio::piped())
