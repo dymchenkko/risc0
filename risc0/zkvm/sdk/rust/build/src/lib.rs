@@ -23,7 +23,7 @@ use std::{
     io::{BufRead, BufReader, Cursor, Read, Write},
     path::{Path, PathBuf},
     process::{Command, Stdio},
-    any:Any,
+    any::Any,
 };
 
 use assert_fs::{fixture::PathChild, TempDir};
