@@ -503,29 +503,12 @@ pub struct GuestOptions {
     pub test_mode: bool,
 }
 
-pub struct TestGuestOptions {
-    /// The number of po2 entries to generate in the MethodID.
-    pub code_limit: u32,
-
-    /// Features for cargo to build the guest with.
-    pub features: Vec<String>,
-}
-
 impl Default for GuestOptions {
     fn default() -> Self {
         GuestOptions {
             code_limit: DEFAULT_METHOD_ID_LIMIT,
             features: vec![],
             test_mode: false,
-        }
-    }
-}
-
-impl Default for TestGuestOptions {
-    fn default() -> Self {
-        TestGuestOptions {
-            code_limit: DEFAULT_METHOD_ID_LIMIT,
-            features: vec![],
         }
     }
 }
@@ -556,20 +539,20 @@ pub fn embed_methods_with_options(mut guest_pkg_to_options: HashMap<&str, GuestO
                 &guest_pkg,
                 &out_dir.join("riscv-guest"),
                 &guest_build_env,
-                guest_options.features(),
+                guest_options.features,
             );
         } else {
             build_guest_package(
                 &guest_pkg,
                 &out_dir.join("riscv-guest"),
                 &guest_build_env,
-                &guest_options.features(),
+                &guest_options.features,
             );
         }
 
         for method in guest_methods(&guest_pkg, &out_dir) {
             methods_file
-                .write_all(method.rust_def(guest_options.code_limit()).as_bytes())
+                .write_all(method.rust_def(guest_options.code_limit).as_bytes())
                 .unwrap();
         }
     }
