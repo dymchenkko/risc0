@@ -571,11 +571,9 @@ pub fn embed_methods_with_options(mut guest_pkg_to_options: HashMap<&str, Box<dy
     for guest_pkg in guest_packages {
         println!("Building guest package {}.{}", pkg.name, guest_pkg.name);
 
-        let guest_options: Box<dyn Options> = Box::new(
-            guest_pkg_to_options
-                .remove(guest_pkg.name.as_str())
-                .unwrap(),
-        );
+        let guest_options: Box<dyn Options> = guest_pkg_to_options
+            .remove(guest_pkg.name.as_str())
+            .unwrap();
 
         match guest_options.as_any().downcast_ref::<TestGuestOptions>() {
             Some(_) => {
