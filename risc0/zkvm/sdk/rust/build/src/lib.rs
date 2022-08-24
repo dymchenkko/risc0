@@ -557,7 +557,7 @@ impl Options for TestGuestOptions {
 /// Embeds methods built for RISC-V for use by host-side dependencies.
 /// Specify custom options for a guest package by defining its [GuestOptions].
 /// See [embed_methods].
-pub fn embed_methods_with_options(mut guest_pkg_to_options: HashMap<&str, dyn Options>) {
+pub fn embed_methods_with_options(mut guest_pkg_to_options: HashMap<&str, Box<dyn Options>>) {
     let out_dir_env = env::var_os("OUT_DIR").unwrap();
     let out_dir = Path::new(&out_dir_env);
 
@@ -571,11 +571,9 @@ pub fn embed_methods_with_options(mut guest_pkg_to_options: HashMap<&str, dyn Op
     for guest_pkg in guest_packages {
         println!("Building guest package {}.{}", pkg.name, guest_pkg.name);
 
-        let guest_options: Box<dyn Options> = Box::new(
-            guest_pkg_to_options
-                .remove(guest_pkg.name.as_str())
-                .unwrap_or_default(),
-        );
+        let guest_options: Box<dyn Options> = guest_pkg_to_options
+            .remove(guest_pkg.name.as_str())
+            .unwrap_or_default();
 
         match guest_options.as_any().downcast_ref::<TestGuestOptions>() {
             Some(_) => {
