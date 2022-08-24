@@ -380,7 +380,7 @@ fn test_guest_package<P>(
     pkg: &Package,
     target_dir: P,
     guest_build_env: &GuestBuildEnv,
-    features: mut Vec<String>,
+    mut features: Vec<String>,
 ) where
     P: AsRef<Path>,
 {
@@ -529,7 +529,7 @@ pub fn embed_methods_with_options(mut guest_pkg_to_options: HashMap<&str, GuestO
                 &guest_pkg,
                 &out_dir.join("riscv-guest"),
                 &guest_build_env,
-                mut guest_options.features,
+                guest_options.features,
             );
         } else {
             build_guest_package(
