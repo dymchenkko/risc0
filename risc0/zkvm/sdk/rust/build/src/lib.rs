@@ -408,6 +408,8 @@ fn test_guest_package<P>(
         "--target-dir",
         target_dir.as_ref().to_str().unwrap(),
     ];
+    let index = features.iter().position(|x| *x == "test").unwrap();
+    features.remove(index);
 
     let features_str = features.join(",");
     if !features.is_empty() {
