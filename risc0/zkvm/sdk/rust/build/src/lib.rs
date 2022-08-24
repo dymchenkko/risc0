@@ -16,6 +16,7 @@
 #![doc = include_str!("../README.md")]
 
 use std::{
+    any::Any,
     collections::HashMap,
     default::Default,
     env,
@@ -23,7 +24,6 @@ use std::{
     io::{BufRead, BufReader, Cursor, Read, Write},
     path::{Path, PathBuf},
     process::{Command, Stdio},
-    any::Any,
 };
 
 use assert_fs::{fixture::PathChild, TempDir};
@@ -488,7 +488,7 @@ fn test_guest_package<P>(
 /// Options defining how to embed a guest package in
 /// [`embed_methods_with_options`].
 
-pub trait Option: Any {
+pub trait Options: Any {
     fn code_limit(&self) -> u32;
     fn features(&self) -> Vec<String>;
     fn as_any(&self) -> &dyn Any;
@@ -499,7 +499,6 @@ pub struct GuestOptions {
 
     /// Features for cargo to build the guest with.
     pub features: Vec<String>,
-
 }
 
 pub struct TestGuestOptions {
@@ -528,7 +527,7 @@ impl Default for TestGuestOptions {
     }
 }
 
-impl Option for GuestOptions {
+impl Options for GuestOptions {
     fn code_limit(&self) -> u32 {
         self.code_limit
     }
@@ -541,7 +540,7 @@ impl Option for GuestOptions {
         self
     }
 }
-impl Option for TestGuestOptions {
+impl Options for TestGuestOptions {
     fn code_limit(&self) -> u32 {
         self.code_limit
     }
@@ -558,7 +557,7 @@ impl Option for TestGuestOptions {
 /// Embeds methods built for RISC-V for use by host-side dependencies.
 /// Specify custom options for a guest package by defining its [GuestOptions].
 /// See [embed_methods].
-pub fn embed_methods_with_options(mut guest_pkg_to_options: HashMap<&str, Option>) {
+pub fn embed_methods_with_options(mut guest_pkg_to_options: HashMap<&str, dyn Option>) {
     let out_dir_env = env::var_os("OUT_DIR").unwrap();
     let out_dir = Path::new(&out_dir_env);
 
@@ -572,30 +571,31 @@ pub fn embed_methods_with_options(mut guest_pkg_to_options: HashMap<&str, Option
     for guest_pkg in guest_packages {
         println!("Building guest package {}.{}", pkg.name, guest_pkg.name);
 
-        let guest_options:Box<dyn Options> = Box::new(guest_pkg_to_options
-            .remove(guest_pkg.name.as_str())
-            .unwrap_or_default());
+        let guest_options: Box<dyn Options> = Box::new(
+            guest_pkg_to_options
+                .remove(guest_pkg.name.as_str())
+                .unwrap_or_default(),
+        );
 
-            match guest.as_any().downcast_ref::<TestGuestOptions>() {
-                Some(_) => {
-                        test_guest_package(
-                        &guest_pkg,
-                &out_dir.join("riscv-guest"),
-                        &guest_build_env,
-                        guest_options.features(),
-                        );
-                },
-                None => {
-                        build_guest_package(
-                        &guest_pkg,
-                &out_dir.join("riscv-guest"),
-                        &guest_build_env,
-                        &guest_options.features(),
-                        );
-                },
-            };
-        
-            
+        match guest_options.as_any().downcast_ref::<TestGuestOptions>() {
+            Some(_) => {
+                test_guest_package(
+                    &guest_pkg,
+                    &out_dir.join("riscv-guest"),
+                    &guest_build_env,
+                    guest_options.features(),
+                );
+            }
+            None => {
+                build_guest_package(
+                    &guest_pkg,
+                    &out_dir.join("riscv-guest"),
+                    &guest_build_env,
+                    &guest_options.features(),
+                );
+            }
+        };
+
         for method in guest_methods(&guest_pkg, &out_dir) {
             methods_file
                 .write_all(method.rust_def(guest_options.code_limit()).as_bytes())
