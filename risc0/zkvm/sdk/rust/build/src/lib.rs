@@ -406,6 +406,8 @@ fn test_guest_package<P>(
         + &target_dir.as_ref().to_str().unwrap().to_owned()
         + "/r0vm risc0-r0vm";
     let mut args2 = vec!["install", root.as_str()];
+    let mut cmd = Command::new(cargo);
+    let mut child = cmd.args(args2).spawn().unwrap();
     let features_str = features.join(",");
     if !features.is_empty() {
         args.push("--features");
@@ -431,7 +433,6 @@ fn test_guest_package<P>(
             "CARGO_TARGET_RISCV32IM_RISC0_ZKVM_ELF_RUNNER",
             target_dir.as_ref().to_str().unwrap().to_owned() + "/r0vm/bin/r0vm --skip-seal --elf",
         )
-        .args(args2)
         .args(args)
         .stderr(Stdio::piped())
         .stdout(Stdio::piped())
