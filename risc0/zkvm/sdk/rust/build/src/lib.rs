@@ -405,7 +405,7 @@ fn test_guest_package<P>(
     let mut args2 = vec![
         "install",
         "--root=",
-        target_dir.as_ref().to_str().unwrap().to_owned() + "/r0vm risc0-r0vm",
+        &(target_dir.as_ref().to_str().unwrap().to_owned() + "/r0vm risc0-r0vm"),
     ];
     let features_str = features.join(",");
     if !features.is_empty() {
