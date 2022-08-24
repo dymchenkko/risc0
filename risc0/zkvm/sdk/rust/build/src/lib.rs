@@ -386,6 +386,12 @@ fn test_guest_package<P>(
 {
     fs::create_dir_all(target_dir.as_ref()).unwrap();
     let cargo = env::var("CARGO").unwrap();
+
+    let root = "--root=".to_owned() + &target_dir.as_ref().to_str().unwrap().to_owned();
+    let mut args2 = vec!["install", root.as_str(), "risc0-r0vm"];
+    let mut cmd = Command::new(&cargo);
+    let mut child = cmd.args(args2).spawn().unwrap();
+
     let mut args = vec![
         "test",
         "--verbose",
@@ -402,10 +408,7 @@ fn test_guest_package<P>(
         "--target-dir",
         target_dir.as_ref().to_str().unwrap(),
     ];
-    let root = "--root=".to_owned() + &target_dir.as_ref().to_str().unwrap().to_owned();
-    let mut args2 = vec!["install", root.as_str(), "risc0-r0vm"];
-    let mut cmd = Command::new(&cargo);
-    let mut child = cmd.args(args2).spawn().unwrap();
+
     let features_str = features.join(",");
     if !features.is_empty() {
         args.push("--features");
