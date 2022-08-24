@@ -516,6 +516,7 @@ impl Default for GuestOptions {
         GuestOptions {
             code_limit: DEFAULT_METHOD_ID_LIMIT,
             features: vec![],
+            test_mode: false,
         }
     }
 }
@@ -592,14 +593,13 @@ pub fn embed_methods_with_options(mut guest_pkg_to_options: HashMap<&str, GuestO
                 &guest_options.features(),
             );
         }
-    }
 
-    for method in guest_methods(&guest_pkg, &out_dir) {
-        methods_file
-            .write_all(method.rust_def(guest_options.code_limit()).as_bytes())
-            .unwrap();
+        for method in guest_methods(&guest_pkg, &out_dir) {
+            methods_file
+                .write_all(method.rust_def(guest_options.code_limit()).as_bytes())
+                .unwrap();
+        }
     }
-
     // HACK: It's not particularly practical to figure out all the
     // files that all the guest crates transtively depend on.  So, we
     // want to run the guest "cargo build" command each time we build.
