@@ -574,7 +574,7 @@ impl Options for TestGuestOptions {
 /// See [embed_methods].
 pub fn embed_methods_with_options<T>(mut guest_pkg_to_options: HashMap<&str, T>)
 where
-    T: Box<dyn Options>,
+    T: Options,
 {
     let out_dir_env = env::var_os("OUT_DIR").unwrap();
     let out_dir = Path::new(&out_dir_env);
