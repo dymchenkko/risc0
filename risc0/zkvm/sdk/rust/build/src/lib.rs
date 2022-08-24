@@ -530,33 +530,6 @@ impl Default for TestGuestOptions {
     }
 }
 
-impl Options for GuestOptions {
-    fn code_limit(&self) -> u32 {
-        self.code_limit
-    }
-
-    fn features(&self) -> Vec<String> {
-        self.features
-    }
-
-    fn as_any(&self) -> &dyn Any {
-        self
-    }
-}
-impl Options for TestGuestOptions {
-    fn code_limit(&self) -> u32 {
-        self.code_limit
-    }
-
-    fn features(&self) -> Vec<String> {
-        self.features
-    }
-
-    fn as_any(&self) -> &dyn Any {
-        self
-    }
-}
-
 /// Embeds methods built for RISC-V for use by host-side dependencies.
 /// Specify custom options for a guest package by defining its [GuestOptions].
 /// See [embed_methods].
