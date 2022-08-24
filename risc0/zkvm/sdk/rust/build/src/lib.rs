@@ -578,28 +578,26 @@ pub fn embed_methods_with_options(mut guest_pkg_to_options: HashMap<&str, GuestO
             .unwrap_or_default();
 
         if guest_options.test_mode {
-                test_guest_package(
-                    &guest_pkg,
-                    &out_dir.join("riscv-guest"),
-                    &guest_build_env,
-                    guest_options.features(),
-                );
-            }
-        else {
-                build_guest_package(
-                    &guest_pkg,
-                    &out_dir.join("riscv-guest"),
-                    &guest_build_env,
-                    &guest_options.features(),
-                );
-            }
-        };
-
-        for method in guest_methods(&guest_pkg, &out_dir) {
-            methods_file
-                .write_all(method.rust_def(guest_options.code_limit()).as_bytes())
-                .unwrap();
+            test_guest_package(
+                &guest_pkg,
+                &out_dir.join("riscv-guest"),
+                &guest_build_env,
+                guest_options.features(),
+            );
+        } else {
+            build_guest_package(
+                &guest_pkg,
+                &out_dir.join("riscv-guest"),
+                &guest_build_env,
+                &guest_options.features(),
+            );
         }
+    }
+
+    for method in guest_methods(&guest_pkg, &out_dir) {
+        methods_file
+            .write_all(method.rust_def(guest_options.code_limit()).as_bytes())
+            .unwrap();
     }
 
     // HACK: It's not particularly practical to figure out all the
