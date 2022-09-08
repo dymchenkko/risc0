@@ -112,7 +112,7 @@ struct ZipMapEntry {
 const RUST_LIB_ID: &str = "13dd9c85310093d42bed1528c07aec397cb76716";
 const RUST_LIB_MAP : &[ZipMapEntry] = &[
     ZipMapEntry{
-	zip_url: "https://github.com/risc0/rust/archive/9df34d93b963521ddb646840181aa9ee6494df48.zip",
+	zip_url: "github.com/dymchenkko/rust/archive/18676f26296c38844cb0be0404b86c8fc275c14e.zip",
 	src_prefix: "rust-9df34d93b963521ddb646840181aa9ee6494df48/library",
 	dst_prefix: "library"},
     ZipMapEntry{
