@@ -290,21 +290,21 @@ impl Hal for MetalHal {
         assert_eq!(row_size * count, io.size());
         let bits = log2_ceil(row_size);
         assert_eq!(row_size, 1 << bits);
-        log::debug!(
-            "io: {}, count: {count}, row_size: {row_size}, bits: {bits}",
-            io.size()
-        );
+        // log::debug!(
+        // "io: {}, count: {count}, row_size: {row_size}, bits: {bits}",
+        // io.size()
+        // );
         let args = &[io.as_arg(), KernelArg::Integer(bits as u32)];
         self.dispatch_by_name("multi_bit_reverse", args, row_size as u64 * count as u64);
     }
 
     //#[tracing::instrument(skip_all)]
     fn batch_expand(&self, output: &Self::BufferElem, input: &Self::BufferElem, poly_count: usize) {
-        log::debug!(
-            "output: {}, input: {}, poly_count: {poly_count}",
-            output.size(),
-            input.size()
-        );
+        // log::debug!(
+        // "output: {}, input: {}, poly_count: {poly_count}",
+        // output.size(),
+        // input.size()
+        // );
         let out_size = output.size() / poly_count;
         let in_size = input.size() / poly_count;
         let expand_bits = log2_ceil(out_size / in_size);
@@ -324,10 +324,10 @@ impl Hal for MetalHal {
 
     //#[tracing::instrument(skip_all)]
     fn batch_evaluate_ntt(&self, io: &Self::BufferElem, count: usize, expand_bits: usize) {
-        log::debug!(
-            "io: {}, count: {count}, expand_bits: {expand_bits}",
-            io.size()
-        );
+        // log::debug!(
+        // "io: {}, count: {count}, expand_bits: {expand_bits}",
+        // io.size()
+        // );
         let row_size = io.size() / count;
         assert_eq!(row_size * count, io.size());
         let n_bits = log2_ceil(row_size);
@@ -351,7 +351,7 @@ impl Hal for MetalHal {
 
     //#[tracing::instrument(skip_all)]
     fn batch_interpolate_ntt(&self, io: &Self::BufferElem, count: usize) {
-        log::debug!("io: {}, count: {count}", io.size());
+        // log::debug!("io: {}, count: {count}", io.size());
         let row_size = io.size() / count;
         assert_eq!(row_size * count, io.size());
         let n_bits = log2_ceil(row_size);
@@ -467,12 +467,12 @@ impl Hal for MetalHal {
         input_size: usize,
         count: usize,
     ) {
-        log::debug!(
-            "output: {}, input: {}, combos: {}, input_size: {input_size}, count: {count}",
-            output.size(),
-            input.size(),
-            combos.size(),
-        );
+        // log::debug!(
+        // "output: {}, input: {}, combos: {}, input_size: {input_size}, count:
+        // {count}", output.size(),
+        // input.size(),
+        // combos.size(),
+        // );
 
         let mix_start = self.copy_from_extelem("mix_start", &[*mix_start]);
         let mix = self.copy_from_extelem("mix", &[*mix]);

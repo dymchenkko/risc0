@@ -17,7 +17,7 @@ use std::collections::BTreeMap;
 use anyhow::{bail, Result};
 use bytemuck::Pod;
 use lazy_regex::{regex, Captures};
-use log::{debug, trace};
+// use log::{debug, trace};
 use risc0_circuit_rv32im::CircuitImpl;
 use risc0_zkp::{
     adapter::{CircuitStepHandler, PolyExt},
@@ -127,7 +127,7 @@ impl MemoryState {
 
     #[track_caller]
     fn store_region(&mut self, addr: u32, slice: &[u8]) {
-        trace!("store_region: 0x{addr:08X} <= {} bytes", slice.len());
+        // trace!("store_region: 0x{addr:08X} <= {} bytes", slice.len());
         for i in 0..slice.len() {
             self.store_u8(addr + i as u32, slice[i]);
         }
@@ -217,7 +217,7 @@ impl<'a, H: HostHandler> CircuitStepHandler<BabyBearElem> for MachineContext<'a,
         match name {
             "halt" => {
                 if !self.halted {
-                    debug!("HALT: {cycle}");
+                    // debug!("HALT: {cycle}");
                 }
                 self.halted = true;
                 Ok(())
@@ -226,7 +226,7 @@ impl<'a, H: HostHandler> CircuitStepHandler<BabyBearElem> for MachineContext<'a,
             "getMajor" => {
                 let opcode = self.decode((args[0], args[1], args[2], args[3]));
                 outs[0] = BabyBearElem::new(opcode.major);
-                trace!("decode: {}", opcode.mnemonic);
+                // trace!("decode: {}", opcode.mnemonic);
                 Ok(())
             }
             "getMinor" => {
@@ -399,10 +399,10 @@ impl<'a, H: HostHandler> MachineContext<'a, H> {
         if self.trace_enabled {
             self.extract_trace(msg, args).unwrap();
         }
-        if log::max_level() < log::LevelFilter::Trace {
-            // Don't bother to format it if we're not even logging.
-            return;
-        }
+        // if log::max_level() < log::LevelFilter::Trace {
+        // Don't bother to format it if we're not even logging.
+        // return;
+        // }
 
         // "msg" is given to us in C++-style formatting, so interpret it.
         let re = regex!("%([0-9]*)([xudw%])");
@@ -448,7 +448,7 @@ impl<'a, H: HostHandler> MachineContext<'a, H> {
             "Args missing formatting: {:?} in {msg}",
             args_left
         );
-        trace!("{}", formatted);
+        // trace!("{}", formatted);
     }
 
     fn ram_read(
@@ -557,7 +557,7 @@ impl<'a, H: HostHandler> MachineContext<'a, H> {
                 let msg_len = self.memory.load_register(REG_A1);
                 let buf = self.memory.load_region(msg_ptr, msg_len);
                 let str = String::from_utf8(buf).unwrap();
-                debug!("SYS_PANIC[{cycle}]> {str}");
+                // debug!("SYS_PANIC[{cycle}]> {str}");
                 self.handler.on_fault(&str)?;
                 Ok((split_word8(0), split_word8(0)))
             }
@@ -574,7 +574,7 @@ impl<'a, H: HostHandler> MachineContext<'a, H> {
                 let buf_ptr = self.memory.load_register(REG_A1);
                 let buf_len = self.memory.load_register(REG_A2);
                 let out_ptr = self.memory.load_register(REG_A3);
-                debug!("SYS_IO[{cycle}]");
+                // debug!("SYS_IO[{cycle}]");
 
                 let buf = self.memory.load_region(buf_ptr, buf_len);
                 let result = self.handler.on_txrx(channel, &buf)?;
@@ -585,13 +585,13 @@ impl<'a, H: HostHandler> MachineContext<'a, H> {
             SYS_COMMIT => {
                 let buf_ptr = self.memory.load_register(REG_A0);
                 let buf_len = self.memory.load_register(REG_A1);
-                debug!("SYS_COMMIT[{cycle}]> 0x{buf_ptr:08X} : {buf_len}");
+                // debug!("SYS_COMMIT[{cycle}]> 0x{buf_ptr:08X} : {buf_len}");
                 let buf = self.memory.load_region_u32(buf_ptr, buf_len);
                 self.handler.on_commit(buf.as_slice())?;
                 Ok((split_word8(0), split_word8(0)))
             }
             SYS_CYCLE_COUNT => {
-                debug!("SYS_CYCLE_COUNT[{cycle}]> cycle = {cycle}");
+                // debug!("SYS_CYCLE_COUNT[{cycle}]> cycle = {cycle}");
                 Ok((split_word8(cycle as u32), split_word8(0)))
             }
             SYS_COMPUTE_POLY => {
@@ -600,7 +600,7 @@ impl<'a, H: HostHandler> MachineContext<'a, H> {
                 let out_ptr = self.memory.load_register(REG_A2);
                 let mix_ptr = self.memory.load_register(REG_A3);
                 let result_ptr = self.memory.load_register(REG_A4);
-                debug!("SYS_COMPUTE_POLY[{cycle}]>");
+                // debug!("SYS_COMPUTE_POLY[{cycle}]>");
 
                 let eval_u: Vec<BabyBearExtElem> = self.memory.read_slice(eval_u_ptr);
                 let poly_mix = self.memory.read_value(poly_mix_ptr);
@@ -714,7 +714,7 @@ pub struct RV32Executor<'a, H: HostHandler> {
 
 impl<'a, H: HostHandler> RV32Executor<'a, H> {
     pub fn new(circuit: &'static CircuitImpl, elf: &'a Program, io: &'a mut H) -> Self {
-        debug!("image.size(): {}", elf.image.len());
+        // debug!("image.size(): {}", elf.image.len());
         let machine = MachineContext::new(io);
         let min_po2 = log2_ceil(1570 + elf.image.len() / 3 + ZK_CYCLES);
         let executor = Executor::new(circuit, machine, min_po2, MAX_CYCLES_PO2);

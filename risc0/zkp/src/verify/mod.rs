@@ -158,7 +158,7 @@ mod host {
         }
 
         fn debug(&self, msg: &str) {
-            log::debug!("{}", msg);
+            // log::debug!("{}", msg);
         }
 
         fn fold_eval(&self, io: &mut [Self::ExtElem; FRI_FOLD], x: Self::ExtElem) -> Self::ExtElem {

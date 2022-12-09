@@ -197,13 +197,13 @@ where
         let rows = coeffs.size() / poly_count;
         let po2 = crate::core::log2_ceil(rows);
         let count = 1 << po2;
-        log::debug!(
-            "coeffs: {}, poly_count: {poly_count}, which: {}, xs: {}, out: {}, count: {count}, rows: {rows}, po2: {po2}",
-            coeffs.size(),
-            which.size(),
-            xs.size(),
-            out.size()
-        );
+        // log::debug!(
+        // "coeffs: {}, poly_count: {poly_count}, which: {}, xs: {}, out: {}, count:
+        // {count}, rows: {rows}, po2: {po2}", coeffs.size(),
+        // which.size(),
+        // xs.size(),
+        // out.size()
+        // );
 
         coeffs.assert_eq();
         which.assert_eq();

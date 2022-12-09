@@ -58,19 +58,19 @@ impl<'a> EvalCheck<CudaHal> for CudaEvalCheck {
         po2: usize,
         steps: usize,
     ) {
-        log::debug!(
-            "check: {}, code: {}, data: {}, accum: {}, mix: {} out: {}",
-            check.size(),
-            code.size(),
-            data.size(),
-            accum.size(),
-            mix.size(),
-            out.size()
-        );
-        log::debug!(
-            "total: {}",
-            (check.size() + code.size() + data.size() + accum.size() + mix.size() + out.size()) * 4
-        );
+        // log::debug!(
+        // "check: {}, code: {}, data: {}, accum: {}, mix: {} out: {}",
+        // check.size(),
+        // code.size(),
+        // data.size(),
+        // accum.size(),
+        // mix.size(),
+        // out.size()
+        // );
+        // log::debug!(
+        // "total: {}",
+        // (check.size() + code.size() + data.size() + accum.size() + mix.size() +
+        // out.size()) * 4 );
 
         const EXP_PO2: usize = log2_ceil(INV_RATE);
         let domain = steps * INV_RATE;

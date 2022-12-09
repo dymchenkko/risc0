@@ -162,7 +162,8 @@ mod prove {
                 cycle += 1;
                 Ok(true)
             } else {
-                log::debug!("Halting. {cycle} + {fini} + ZK_CYCLES ({total}) < {max_cycles}");
+                // log::debug!("Halting. {cycle} + {fini} + ZK_CYCLES ({total}) <
+                // {max_cycles}");
                 Ok(false)
             }
         })

@@ -93,51 +93,51 @@ where
             &mut self.accum,
         ];
         let accum: Mutex<Accum<F::ExtElem>> = Mutex::new(Accum::new(self.steps));
-        tracing::info_span!("step_compute_accum").in_scope(|| {
-            // TODO: Add an abstraction layer for this so we can run
-            // it on cuda, etc.
-            // TODO: Figure out a safer way to pass args to this parallelization.
-            let args_ptr: AtomicPtr<&mut [&mut [F::Elem]]> = AtomicPtr::new(&mut args);
-            let c = &self.exec.circuit;
-            (0..self.steps - ZK_CYCLES).into_par_iter().for_each_init(
-                || Handler::<F>::new(&accum),
-                |accum_handler, cycle| {
-                    let args: &mut [&mut [F::Elem]] =
-                        unsafe { &mut *args_ptr.load(Ordering::Relaxed) };
-                    c.step_compute_accum(
-                        &CircuitStepContext {
-                            size: self.steps,
-                            cycle,
-                        },
-                        accum_handler,
-                        args,
-                    )
-                    .unwrap();
-                },
-            );
-        });
-        tracing::info_span!("calc_prefix_products").in_scope(|| {
-            accum.lock().unwrap().calc_prefix_products();
-        });
-        tracing::info_span!("step_verify_accum").in_scope(|| {
-            let args_ptr: AtomicPtr<&mut [&mut [F::Elem]]> = AtomicPtr::new(&mut args);
-            let c = &self.exec.circuit;
-            (0..self.steps - ZK_CYCLES).into_par_iter().for_each_init(
-                || Handler::<F>::new(&accum),
-                |accum_handler, cycle| {
-                    let args = unsafe { &mut *args_ptr.load(Ordering::Relaxed) };
-                    c.step_verify_accum(
-                        &CircuitStepContext {
-                            size: self.steps,
-                            cycle,
-                        },
-                        accum_handler,
-                        args,
-                    )
-                    .unwrap();
-                },
-            );
-        });
+        // tracing::info_span!("step_compute_accum").in_scope(|| {
+        // TODO: Add an abstraction layer for this so we can run
+        // it on cuda, etc.
+        // TODO: Figure out a safer way to pass args to this parallelization.
+        // let args_ptr: AtomicPtr<&mut [&mut [F::Elem]]> = AtomicPtr::new(&mut args);
+        // let c = &self.exec.circuit;
+        // (0..self.steps - ZK_CYCLES).into_par_iter().for_each_init(
+        // || Handler::<F>::new(&accum),
+        // |accum_handler, cycle| {
+        // let args: &mut [&mut [F::Elem]] =
+        // unsafe { &mut *args_ptr.load(Ordering::Relaxed) };
+        // c.step_compute_accum(
+        // &CircuitStepContext {
+        // size: self.steps,
+        // cycle,
+        // },
+        // accum_handler,
+        // args,
+        // )
+        // .unwrap();
+        // },
+        // );
+        // });
+        // tracing::info_span!("calc_prefix_products").in_scope(|| {
+        // accum.lock().unwrap().calc_prefix_products();
+        // });
+        // tracing::info_span!("step_verify_accum").in_scope(|| {
+        // let args_ptr: AtomicPtr<&mut [&mut [F::Elem]]> = AtomicPtr::new(&mut args);
+        // let c = &self.exec.circuit;
+        // (0..self.steps - ZK_CYCLES).into_par_iter().for_each_init(
+        // || Handler::<F>::new(&accum),
+        // |accum_handler, cycle| {
+        // let args = unsafe { &mut *args_ptr.load(Ordering::Relaxed) };
+        // c.step_verify_accum(
+        // &CircuitStepContext {
+        // size: self.steps,
+        // cycle,
+        // },
+        // accum_handler,
+        // args,
+        // )
+        // .unwrap();
+        // },
+        // );
+        // });
         // Zero out 'invalid' entries in accum
         for value in self.accum.iter_mut().chain(self.exec.output.iter_mut()) {
             *value = value.valid_or_zero();

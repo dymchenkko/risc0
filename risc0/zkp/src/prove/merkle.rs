@@ -15,8 +15,7 @@
 use alloc::vec::Vec;
 
 #[allow(unused_imports)]
-use log::debug;
-
+// use log::debug;
 use crate::{
     core::sha::{Digest, Sha},
     hal::{Buffer, Hal},
@@ -54,12 +53,12 @@ impl<H: Hal> MerkleTreeProver<H> {
         // Sha each column
         hal.sha_rows(&nodes.slice(rows, rows), matrix);
         // For each layer, sha up the layer below
-        tracing::info_span!("sha_fold").in_scope(|| {
-            for i in (0..params.layers).rev() {
-                let layer_size = 1 << i;
-                hal.sha_fold(&nodes, layer_size * 2, layer_size);
-            }
-        });
+        // tracing::info_span!("sha_fold").in_scope(|| {
+        // for i in (0..params.layers).rev() {
+        // let layer_size = 1 << i;
+        // hal.sha_fold(&nodes, layer_size * 2, layer_size);
+        // }
+        // });
         let mut nodes_host = Vec::with_capacity(nodes.size());
         nodes.view(|view| {
             nodes_host.extend_from_slice(view);

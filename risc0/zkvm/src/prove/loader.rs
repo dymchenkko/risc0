@@ -20,7 +20,7 @@ use core::{
 };
 
 use anyhow::Result;
-use log::{debug, trace};
+// use log::{debug, trace};
 use risc0_zkp::{
     adapter::TapsProvider,
     field::{baby_bear::BabyBearElem, Elem},
@@ -149,7 +149,7 @@ where
 
     /// Initialization Phase
     pub fn init(&mut self) -> Result<bool> {
-        debug!("INIT");
+        // debug!("INIT");
         self.start();
         self.code[ControlIndex::Init] = BabyBearElem::ONE;
         self.next()
@@ -157,7 +157,7 @@ where
 
     /// Setup Phase: Prepare for loading
     pub fn setup(&mut self, count: usize) -> Result<bool> {
-        debug!("SETUP");
+        // debug!("SETUP");
         for _ in 0..count - 1 {
             self.start();
             self.code[ControlIndex::Setup] = BabyBearElem::ONE;
@@ -172,7 +172,7 @@ where
     /// Load Phase: Write binary instructions from ELF into control columns
     /// Instructions are written three words at a time.
     pub fn load(&mut self, triple: &TripleWord) -> Result<bool> {
-        trace!("LOAD[{}]: {triple:?}", self.cycle);
+        // trace!("LOAD[{}]: {triple:?}", self.cycle);
         self.start();
         self.code[ControlIndex::RamLoad] = BabyBearElem::ONE;
         self.code[ControlIndex::Info] = BabyBearElem::new(triple.addr);
@@ -193,7 +193,7 @@ where
 
     /// Reset Phase
     pub fn reset(&mut self, start_addr: u32) -> Result<bool> {
-        debug!("RESET: 0x{start_addr:08X}");
+        // debug!("RESET: 0x{start_addr:08X}");
         self.start();
         self.code[ControlIndex::Reset] = BabyBearElem::ONE;
         self.code[ControlIndex::Info] = BabyBearElem::new(start_addr);
@@ -202,7 +202,7 @@ where
 
     /// Fini Phase: Initialize RamFini and BytesFini
     pub fn fini(&mut self) -> Result<bool> {
-        debug!("FINI");
+        // debug!("FINI");
         self.start();
         self.code[ControlIndex::RamFini] = BabyBearElem::ONE;
         self.next()?;
@@ -214,7 +214,7 @@ where
 
     /// Body Phase: In this phase, the zkVM executes the loaded instructions.
     pub fn body(&mut self) -> Result<()> {
-        debug!("BODY");
+        // debug!("BODY");
         loop {
             self.start();
             self.code[ControlIndex::Body] = BabyBearElem::ONE;

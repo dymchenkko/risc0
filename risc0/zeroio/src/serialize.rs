@@ -95,12 +95,12 @@ where
 
     let (mut alloc_buf, _) = buf.as_mut_slice().split_at_mut(tot_len);
 
-    log::trace!(
-        "Starting to serialize type {:?} with {} words and {} fixed words",
-        core::any::type_name::<T>(),
-        tot_len,
-        T::FIXED_WORDS
-    );
+    // log::trace!(
+    // "Starting to serialize type {:?} with {} words and {} fixed words",
+    // core::any::type_name::<T>(),
+    // tot_len,
+    // T::FIXED_WORDS
+    // );
 
     let mut alloc = Alloc {
         buf_left: MaybeUninit::new(&mut alloc_buf),

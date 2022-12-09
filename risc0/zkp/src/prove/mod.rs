@@ -22,8 +22,7 @@ pub mod write_iop;
 
 use alloc::{vec, vec::Vec};
 
-use log::debug;
-
+// use log::debug;
 use self::adapter::ProveAdapter;
 use crate::{
     adapter::{CircuitDef, CircuitStepHandler},
@@ -69,12 +68,12 @@ where
     let code_size = taps.group_size(RegisterGroup::Code);
     let data_size = taps.group_size(RegisterGroup::Data);
     let accum_size = taps.group_size(RegisterGroup::Accum);
-    debug!(
-        "code: {code_size}/{}, data: {data_size}/{}, accum: {accum_size}/{}",
-        circuit.get_code().len(),
-        circuit.get_data().len(),
-        circuit.get_accum().len()
-    );
+    // debug!(
+    // "code: {code_size}/{}, data: {data_size}/{}, accum: {accum_size}/{}",
+    // circuit.get_code().len(),
+    // circuit.get_data().len(),
+    // circuit.get_accum().len()
+    // );
 
     let mut iop = WriteIOP::new(sha);
 
@@ -88,22 +87,22 @@ where
     let code_coeffs = make_coeffs(hal, circuit.get_code(), code_size);
     let code_group = PolyGroup::new(hal, &code_coeffs, code_size, size, "code");
     code_group.merkle.commit(&mut iop);
-    debug!("codeGroup: {}", code_group.merkle.root());
+    // debug!("codeGroup: {}", code_group.merkle.root());
 
     let data_coeffs = make_coeffs(hal, circuit.get_data(), data_size);
     let data_group = PolyGroup::new(hal, &data_coeffs, data_size, size, "data");
     data_group.merkle.commit(&mut iop);
-    debug!("dataGroup: {}", data_group.merkle.root());
+    // debug!("dataGroup: {}", data_group.merkle.root());
 
     circuit.accumulate(&mut iop);
 
     // Make the accum group + commit
-    debug!("size = {size}, accumSize = {accum_size}");
-    debug!("getAccum.size() = {}", circuit.get_accum().len());
+    // debug!("size = {size}, accumSize = {accum_size}");
+    // debug!("getAccum.size() = {}", circuit.get_accum().len());
     let accum_coeffs = make_coeffs(hal, circuit.get_accum(), accum_size);
     let accum_group = PolyGroup::new(hal, &accum_coeffs, accum_size, size, "accum");
     accum_group.merkle.commit(&mut iop);
-    debug!("accumGroup: {}", accum_group.merkle.root());
+    // debug!("accumGroup: {}", accum_group.merkle.root());
 
     // Set the poly mix value
     let poly_mix = H::ExtElem::random(&mut iop.rng);
@@ -129,7 +128,7 @@ where
     check_poly.view(|check_out| {
         for i in (0..domain).step_by(4) {
             if check_out[i] != H::Elem::ZERO {
-                debug!("check[{}] =  {:?}", i, check_out[i]);
+                // debug!("check[{}] =  {:?}", i, check_out[i]);
             }
         }
     });
@@ -155,7 +154,7 @@ where
     // Make the PolyGroup + add it to the IOP;
     let check_group = PolyGroup::new(hal, &check_poly, H::CHECK_SIZE, size, "check");
     check_group.merkle.commit(&mut iop);
-    debug!("checkGroup: {}", check_group.merkle.root());
+    // debug!("checkGroup: {}", check_group.merkle.root());
 
     // Now pick a value for Z
     let z = H::ExtElem::random(&mut iop.rng);
@@ -225,14 +224,14 @@ where
         coeff_u.extend(view);
     });
 
-    debug!("Size of U = {}", coeff_u.len());
+    // debug!("Size of U = {}", coeff_u.len());
     iop.write_field_elem_slice(&coeff_u);
     let hash_u = sha.hash_raw_pod_slice(coeff_u.as_slice());
     iop.commit(&hash_u);
 
     // Set the mix mix value
     let mix = H::ExtElem::random(&mut iop.rng);
-    debug!("Mix = {mix:?}");
+    // debug!("Mix = {mix:?}");
 
     // Do the coefficent mixing
     // Begin by making a zeroed output buffer
@@ -317,10 +316,10 @@ where
 
     // Finally do the FRI protocol to prove the degree of the polynomial
     hal.batch_bit_reverse(&final_poly_coeffs, H::ExtElem::EXT_SIZE);
-    debug!(
-        "FRI-proof, size = {}",
-        final_poly_coeffs.size() / H::ExtElem::EXT_SIZE
-    );
+    // debug!(
+    // "FRI-proof, size = {}",
+    // final_poly_coeffs.size() / H::ExtElem::EXT_SIZE
+    // );
 
     fri_prove(hal, &mut iop, &final_poly_coeffs, |iop, idx| {
         accum_group.merkle.prove(iop, idx);
@@ -331,7 +330,7 @@ where
 
     // Return final proof
     let proof = iop.proof;
-    debug!("Proof size = {}", proof.len());
+    // debug!("Proof size = {}", proof.len());
     proof
 }
 

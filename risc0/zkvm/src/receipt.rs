@@ -50,14 +50,14 @@ where
         let po2 = po2 as usize;
         let which = po2 - MIN_CYCLES_PO2;
         #[cfg(not(target_os = "zkvm"))]
-        if log::log_enabled!(log::Level::Debug) {
-            log::debug!("merkle_root: {merkle_root}");
-            log::debug!("MethodId");
+        /*if log::log_enabled!(log::Level::Debug) {
+            // log::debug!("merkle_root: {merkle_root}");
+            // log::debug!("MethodId");
             for (i, entry) in method_id.table.iter().enumerate() {
                 let marker = if i == which { "*" } else { "" };
-                log::debug!("  {i}: {entry}{marker}");
+                // log::debug!("  {i}: {entry}{marker}");
             }
-        }
+        }*/
         if which >= method_id.table.len() {
             return Err(VerificationError::MethodCycleError { required: po2 });
         }

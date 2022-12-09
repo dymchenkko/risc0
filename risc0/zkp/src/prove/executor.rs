@@ -15,7 +15,7 @@
 use core::cmp::max;
 
 use anyhow::{bail, Result};
-use log::debug;
+// use log::debug;
 use rand::thread_rng;
 
 use crate::{
@@ -58,7 +58,7 @@ where
         let data_size = taps.group_size(RegisterGroup::Data);
         let steps = 1 << po2;
         let output_size = C::OUTPUT_SIZE;
-        debug!("po2: {po2}, steps: {steps}, code_size: {code_size}");
+        // debug!("po2: {po2}, steps: {steps}, code_size: {code_size}");
         Executor {
             circuit,
             handler,
@@ -80,12 +80,12 @@ where
         // debug!("code: {:?}", code);
         let next_cycles = self.cycle + needed_fini + ZK_CYCLES;
         if next_cycles >= self.steps {
-            debug!(
-                "cycle:{} + needed_fini:{} + ZK_CYCLES:{} = {} >= steps: {}",
-                self.cycle, needed_fini, ZK_CYCLES, next_cycles, self.steps
-            );
+            // debug!(
+            // "cycle:{} + needed_fini:{} + ZK_CYCLES:{} = {} >= steps: {}",
+            // self.cycle, needed_fini, ZK_CYCLES, next_cycles, self.steps
+            // );
             if self.halted {
-                debug!("halted");
+                // debug!("halted");
                 return Ok(false);
             }
             self.expand()?;
@@ -112,7 +112,7 @@ where
     }
 
     pub fn expand(&mut self) -> Result<()> {
-        debug!("expand");
+        // debug!("expand");
         if self.steps >= (1 << self.max_po2) {
             bail!("Cannot expand, max po2 of {} reached.", self.max_po2);
         }
@@ -162,30 +162,30 @@ where
         ];
 
         self.handler.sort("ram");
-        tracing::info_span!("step_verify_mem").in_scope(|| {
-            for i in 0..self.cycle {
-                let ctx = CircuitStepContext {
-                    cycle: i,
-                    size: self.steps,
-                };
-                self.circuit
-                    .step_verify_mem(&ctx, &mut self.handler, args)
-                    .unwrap();
-            }
-        });
+        // tracing::info_span!("step_verify_mem").in_scope(|| {
+        // for i in 0..self.cycle {
+        // let ctx = CircuitStepContext {
+        // cycle: i,
+        // size: self.steps,
+        // };
+        // self.circuit
+        // .step_verify_mem(&ctx, &mut self.handler, args)
+        // .unwrap();
+        // }
+        // });
 
         self.handler.sort("bytes");
-        tracing::info_span!("step_verify_bytes").in_scope(|| {
-            for i in 0..self.cycle {
-                let ctx = CircuitStepContext {
-                    cycle: i,
-                    size: self.steps,
-                };
-                self.circuit
-                    .step_verify_bytes(&ctx, &mut self.handler, args)
-                    .unwrap();
-            }
-        });
+        // tracing::info_span!("step_verify_bytes").in_scope(|| {
+        // for i in 0..self.cycle {
+        // let ctx = CircuitStepContext {
+        // cycle: i,
+        // size: self.steps,
+        // };
+        // self.circuit
+        // .step_verify_bytes(&ctx, &mut self.handler, args)
+        // .unwrap();
+        // }
+        // });
 
         // Zero out 'invalid' entries in data and output.
         for value in [self.data.iter_mut(), self.output.iter_mut()]

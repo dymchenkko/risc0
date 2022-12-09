@@ -51,7 +51,7 @@ struct RawBuffer {
 
 impl RawBuffer {
     pub fn new(name: &'static str, size: usize) -> Self {
-        log::debug!("alloc: {size} bytes, {name}");
+        // log::debug!("alloc: {size} bytes, {name}");
         Self {
             name,
             buf: unsafe { UnifiedBuffer::uninitialized(size).unwrap() },
@@ -61,7 +61,7 @@ impl RawBuffer {
 
 impl Drop for RawBuffer {
     fn drop(&mut self) {
-        log::debug!("free: {} bytes, {}", self.buf.len(), self.name);
+        // log::debug!("free: {} bytes, {}", self.buf.len(), self.name);
     }
 }
 

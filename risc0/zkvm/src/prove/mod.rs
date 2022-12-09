@@ -253,16 +253,16 @@ impl<'a> exec::HostHandler for ProverImpl<'a> {
         }
         match channel {
             SENDRECV_CHANNEL_INITIAL_INPUT => {
-                log::debug!("SENDRECV_CHANNEL_INITIAL_INPUT: {}", buf.len());
+                // log::debug!("SENDRECV_CHANNEL_INITIAL_INPUT: {}", buf.len());
                 Ok(self.input.clone())
             }
             SENDRECV_CHANNEL_STDOUT => {
-                log::debug!("SENDRECV_CHANNEL_STDOUT: {}", buf.len());
+                // log::debug!("SENDRECV_CHANNEL_STDOUT: {}", buf.len());
                 self.output.extend(buf);
                 Ok(Vec::new())
             }
             SENDRECV_CHANNEL_STDERR => {
-                log::debug!("SENDRECV_CHANNEL_STDERR: {}", buf.len());
+                // log::debug!("SENDRECV_CHANNEL_STDERR: {}", buf.len());
                 std::io::stderr().lock().write_all(buf).unwrap();
                 Ok(Vec::new())
             }
