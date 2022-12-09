@@ -22,7 +22,6 @@ risc0-zeroio = { version = "1.0.0-rc.2", path = "../zeroio", default-features = 
 rustacuda_core = { version = "0.1", optional = true }
 rustacuda_derive = { version = "0.1", optional = true }
 serde = { version = "1.0", default-features = false, features = ["derive"] }
-tracing = { version = "0.1", default-features = false }
 
 [target.'cfg(not(target_os = "zkvm"))'.dependencies]
 log = "0.4"

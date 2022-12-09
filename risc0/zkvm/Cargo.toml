@@ -28,7 +28,6 @@ risc0-zeroio = { version = "1.0.0-rc.2", path = "../zeroio", default-features = 
 risc0-zkp = { version = "1.0.0-rc.2", path = "../zkp", default-features = false }
 risc0-zkvm-platform = { version = "1.0.0-rc.2", path = "platform" }
 serde = { version = "1.0", default-features = false, features = ["alloc", "derive"] }
-tracing = { version = "0.1", default-features = false}
 
 # TODO(nils): Change these `target_os` checks to `target_vendor` checks when we
 # have a real target triple.
