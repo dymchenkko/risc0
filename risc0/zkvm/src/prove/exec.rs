@@ -284,13 +284,13 @@ impl<'a, H: HostHandler> CircuitStepHandler<BabyBearElem> for MachineContext<'a,
         }
     }
 
-    #[tracing::instrument(skip(self))]
+    //#[tracing::instrument(skip(self))]
     fn sort(&mut self, _: &str) {
         self.memory.ram_plonk.sort();
         self.memory.bytes_plonk.sort();
     }
 
-    #[tracing::instrument(skip(self))]
+    //#[tracing::instrument(skip(self))]
     fn calc_prefix_products(&mut self) {
         for accum in &mut self.memory.plonk_accum {
             accum.1.calc_prefix_products()
@@ -725,7 +725,7 @@ impl<'a, H: HostHandler> RV32Executor<'a, H> {
         }
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     pub fn run(&mut self) -> Result<usize> {
         let cycles = self
             .loader

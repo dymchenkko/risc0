@@ -85,7 +85,7 @@ impl<H: Hal> ProveRoundInfo<H> {
     }
 }
 
-#[tracing::instrument(skip_all)]
+//#[tracing::instrument(skip_all)]
 pub fn fri_prove<H: Hal, S: Sha, F>(
     hal: &H,
     iop: &mut WriteIOP<S>,

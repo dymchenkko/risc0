@@ -191,7 +191,7 @@ where
         CpuBuffer::copy_from(slice)
     }
 
-    #[tracing::instrument(skip_all)]
+    ////#[tracing::instrument(skip_all)]
     fn batch_expand(&self, output: &Self::BufferElem, input: &Self::BufferElem, count: usize) {
         let out_size = output.size() / count;
         let in_size = input.size() / count;
@@ -208,7 +208,7 @@ where
             });
     }
 
-    #[tracing::instrument(skip_all)]
+    ////#[tracing::instrument(skip_all)]
     fn batch_evaluate_ntt(&self, io: &Self::BufferElem, count: usize, expand_bits: usize) {
         let row_size = io.size() / count;
         assert_eq!(row_size * count, io.size());
@@ -219,7 +219,7 @@ where
             });
     }
 
-    #[tracing::instrument(skip_all)]
+    ////#[tracing::instrument(skip_all)]
     fn batch_interpolate_ntt(&self, io: &Self::BufferElem, count: usize) {
         let row_size = io.size() / count;
         assert_eq!(row_size * count, io.size());
@@ -230,7 +230,7 @@ where
             });
     }
 
-    #[tracing::instrument(skip_all)]
+    ////#[tracing::instrument(skip_all)]
     fn batch_bit_reverse(&self, io: &Self::BufferElem, count: usize) {
         let row_size = io.size() / count;
         assert_eq!(row_size * count, io.size());
@@ -241,7 +241,7 @@ where
             });
     }
 
-    #[tracing::instrument(skip_all)]
+    ////#[tracing::instrument(skip_all)]
     fn batch_evaluate_any(
         &self,
         coeffs: &Self::BufferElem,
@@ -275,7 +275,7 @@ where
             });
     }
 
-    #[tracing::instrument(skip_all)]
+    ////#[tracing::instrument(skip_all)]
     fn zk_shift(&self, io: &Self::BufferElem, poly_count: usize) {
         let bits = log2_ceil(io.size() / poly_count);
         let count = io.size();
@@ -291,7 +291,7 @@ where
             });
     }
 
-    #[tracing::instrument(skip_all)]
+    ////#[tracing::instrument(skip_all)]
     fn mix_poly_coeffs(
         &self,
         output: &Self::BufferExtElem,
@@ -339,7 +339,7 @@ where
             });
     }
 
-    #[tracing::instrument(skip_all)]
+    ////#[tracing::instrument(skip_all)]
     fn eltwise_add_elem(
         &self,
         output: &Self::BufferElem,
@@ -358,7 +358,7 @@ where
             });
     }
 
-    #[tracing::instrument(skip_all)]
+    ////#[tracing::instrument(skip_all)]
     fn eltwise_sum_extelem(&self, output: &Self::BufferElem, input: &Self::BufferExtElem) {
         let count = output.size() / Self::ExtElem::EXT_SIZE;
         let to_add = input.size() / count;
@@ -382,7 +382,7 @@ where
         });
     }
 
-    #[tracing::instrument(skip_all)]
+    ////#[tracing::instrument(skip_all)]
     fn eltwise_copy_elem(&self, output: &Self::BufferElem, input: &Self::BufferElem) {
         let count = output.size();
         assert_eq!(count, input.size());
@@ -395,7 +395,7 @@ where
             });
     }
 
-    #[tracing::instrument(skip_all)]
+    // //#[tracing::instrument(skip_all)]
     fn fri_fold(&self, output: &Self::BufferElem, input: &Self::BufferElem, mix: &Self::ExtElem) {
         let count = output.size() / Self::ExtElem::EXT_SIZE;
         assert_eq!(output.size(), count * Self::ExtElem::EXT_SIZE);
@@ -422,7 +422,7 @@ where
         }
     }
 
-    #[tracing::instrument(skip_all)]
+    ////#[tracing::instrument(skip_all)]
     fn sha_rows(&self, output: &Self::BufferDigest, matrix: &Self::BufferElem) {
         let row_size = output.size();
         let col_size = matrix.size() / output.size();

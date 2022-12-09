@@ -45,7 +45,7 @@ impl<H: Hal> MerkleTreeProver<H> {
     /// determines the size of the 'top' layer. It is important that the
     /// verifier is constructed with identical size parameters, including # of
     /// queries, or verification may fail.
-    #[tracing::instrument(name = "MerkleTreeProver", skip_all)]
+    ////#[tracing::instrument(name = "MerkleTreeProver", skip_all)]
     pub fn new(hal: &H, matrix: &H::BufferElem, rows: usize, cols: usize, queries: usize) -> Self {
         assert_eq!(matrix.size(), rows * cols);
         let params = MerkleTreeParams::new(rows, cols, queries);

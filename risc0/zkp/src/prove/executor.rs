@@ -137,7 +137,7 @@ where
         Ok(())
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     pub fn finalize(&mut self) {
         assert!(self.halted);
         assert_eq!(self.cycle, self.steps - ZK_CYCLES);

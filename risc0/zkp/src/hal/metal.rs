@@ -284,7 +284,7 @@ impl Hal for MetalHal {
         BufferImpl::copy_from(&self.device, self.cmd_queue.clone(), slice)
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     fn batch_bit_reverse(&self, io: &Self::BufferElem, count: usize) {
         let row_size = io.size() / count;
         assert_eq!(row_size * count, io.size());
@@ -298,7 +298,7 @@ impl Hal for MetalHal {
         self.dispatch_by_name("multi_bit_reverse", args, row_size as u64 * count as u64);
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     fn batch_expand(&self, output: &Self::BufferElem, input: &Self::BufferElem, poly_count: usize) {
         log::debug!(
             "output: {}, input: {}, poly_count: {poly_count}",
@@ -322,7 +322,7 @@ impl Hal for MetalHal {
         self.dispatch_by_name("batch_expand", args, out_size as u64);
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     fn batch_evaluate_ntt(&self, io: &Self::BufferElem, count: usize, expand_bits: usize) {
         log::debug!(
             "io: {}, count: {count}, expand_bits: {expand_bits}",
@@ -349,7 +349,7 @@ impl Hal for MetalHal {
         }
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     fn batch_interpolate_ntt(&self, io: &Self::BufferElem, count: usize) {
         log::debug!("io: {}, count: {count}", io.size());
         let row_size = io.size() / count;
@@ -377,7 +377,7 @@ impl Hal for MetalHal {
         self.dispatch_by_name("eltwise_mul_factor_fp", args, io.size() as u64);
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     fn batch_evaluate_any(
         &self,
         coeffs: &Self::BufferElem,
@@ -404,7 +404,7 @@ impl Hal for MetalHal {
         self.dispatch(kernel, args, count as u64, Some(params));
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     fn eltwise_add_elem(
         &self,
         output: &Self::BufferElem,
@@ -418,7 +418,7 @@ impl Hal for MetalHal {
         self.dispatch_by_name("eltwise_add_fp", args, count);
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     fn eltwise_sum_extelem(&self, output: &Self::BufferElem, input: &Self::BufferExtElem) {
         let count = output.size() / Self::ExtElem::EXT_SIZE;
         let to_add = input.size() / count;
@@ -433,7 +433,7 @@ impl Hal for MetalHal {
         self.dispatch_by_name("eltwise_sum_fp4", args, count as u64);
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     fn eltwise_copy_elem(&self, output: &Self::BufferElem, input: &Self::BufferElem) {
         assert_eq!(output.size(), input.size());
         let count = output.size() as u64;
@@ -441,7 +441,7 @@ impl Hal for MetalHal {
         self.dispatch_by_name("eltwise_copy_fp", args, count);
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     fn fri_fold(&self, output: &Self::BufferElem, input: &Self::BufferElem, mix: &Self::ExtElem) {
         let count = output.size() / Self::ExtElem::EXT_SIZE;
         assert_eq!(output.size(), count * Self::ExtElem::EXT_SIZE);
@@ -456,7 +456,7 @@ impl Hal for MetalHal {
         self.dispatch_by_name("fri_fold", args, count as u64);
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     fn mix_poly_coeffs(
         &self,
         output: &Self::BufferExtElem,
@@ -497,7 +497,7 @@ impl Hal for MetalHal {
         self.dispatch_by_name("sha_fold", args, output_size as u64);
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     fn sha_rows(&self, output: &Self::BufferDigest, matrix: &Self::BufferElem) {
         let row_size = output.size();
         let col_size = matrix.size() / output.size();
@@ -511,7 +511,7 @@ impl Hal for MetalHal {
         self.dispatch_by_name("sha_rows", args, row_size as u64);
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     fn zk_shift(&self, io: &Self::BufferElem, poly_count: usize) {
         let bits = log2_ceil(io.size() / poly_count);
         let count = io.size();

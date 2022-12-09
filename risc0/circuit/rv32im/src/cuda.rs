@@ -37,7 +37,7 @@ pub struct CudaEvalCheck {
 }
 
 impl CudaEvalCheck {
-    #[tracing::instrument(name = "CudaEvalCheck::new", skip_all)]
+    //(name = "CudaEvalCheck::new", skip_all)]
     pub fn new(hal: Rc<CudaHal>) -> Self {
         let module = Module::load_from_bytes(KERNELS_FATBIN).unwrap();
         Self { hal, module }
@@ -45,7 +45,7 @@ impl CudaEvalCheck {
 }
 
 impl<'a> EvalCheck<CudaHal> for CudaEvalCheck {
-    #[tracing::instrument(skip_all)]
+    ////#[tracing::instrument(skip_all)]
     fn eval_check(
         &self,
         check: &CudaBuffer<BabyBearElem>,

@@ -47,7 +47,7 @@ impl MetalEvalCheck {
 }
 
 impl EvalCheck<MetalHal> for MetalEvalCheck {
-    #[tracing::instrument(skip_all)]
+    ////#[tracing::instrument(skip_all)]
     fn eval_check(
         &self,
         check: &MetalBuffer<BabyBearElem>,

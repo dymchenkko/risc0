@@ -141,7 +141,7 @@ impl<T: Pod> Buffer<T> for BufferImpl<T> {
 }
 
 impl CudaHal {
-    #[tracing::instrument(name = "CudaHal::new", skip_all)]
+    //#[tracing::instrument(name = "CudaHal::new", skip_all)]
     pub fn new() -> Self {
         rustacuda::init(CudaFlags::empty()).unwrap();
         let device = Device::get_device(0).unwrap();
@@ -242,7 +242,7 @@ impl Hal for CudaHal {
         BufferImpl::copy_from(name, slice)
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     fn batch_expand(&self, output: &Self::BufferElem, input: &Self::BufferElem, poly_count: usize) {
         let out_size = output.size() / poly_count;
         let in_size = input.size() / poly_count;
@@ -269,7 +269,7 @@ impl Hal for CudaHal {
         stream.synchronize().unwrap();
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     fn batch_evaluate_ntt(&self, io: &Self::BufferElem, count: usize, expand_bits: usize) {
         let row_size = io.size() / count;
         assert_eq!(row_size * count, io.size());
@@ -298,7 +298,7 @@ impl Hal for CudaHal {
         }
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     fn batch_interpolate_ntt(&self, io: &Self::BufferElem, count: usize) {
         let row_size = io.size() / count;
         assert_eq!(row_size * count, io.size());
@@ -341,7 +341,7 @@ impl Hal for CudaHal {
         stream.synchronize().unwrap();
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     fn batch_bit_reverse(&self, io: &Self::BufferElem, count: usize) {
         let row_size = io.size() / count;
         assert_eq!(row_size * count, io.size());
@@ -364,7 +364,7 @@ impl Hal for CudaHal {
         stream.synchronize().unwrap();
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     fn batch_evaluate_any(
         &self,
         coeffs: &Self::BufferElem,
@@ -398,7 +398,7 @@ impl Hal for CudaHal {
         stream.synchronize().unwrap();
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     fn zk_shift(&self, io: &Self::BufferElem, poly_count: usize) {
         let bits = log2_ceil(io.size() / poly_count);
         let count = io.size();
@@ -419,7 +419,7 @@ impl Hal for CudaHal {
         stream.synchronize().unwrap();
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     fn mix_poly_coeffs(
         &self,
         output: &Self::BufferExtElem,
@@ -452,7 +452,7 @@ impl Hal for CudaHal {
         stream.synchronize().unwrap();
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     fn eltwise_add_elem(
         &self,
         output: &Self::BufferElem,
@@ -479,7 +479,7 @@ impl Hal for CudaHal {
         stream.synchronize().unwrap();
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     fn eltwise_sum_extelem(&self, output: &Self::BufferElem, input: &Self::BufferExtElem) {
         let count = output.size() / Self::ExtElem::EXT_SIZE;
         let to_add = input.size() / count;
@@ -502,7 +502,7 @@ impl Hal for CudaHal {
         stream.synchronize().unwrap();
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     fn eltwise_copy_elem(&self, output: &Self::BufferElem, input: &Self::BufferElem) {
         let count = output.size();
         assert_eq!(count, input.size());
@@ -522,7 +522,7 @@ impl Hal for CudaHal {
         stream.synchronize().unwrap();
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     fn fri_fold(&self, output: &Self::BufferElem, input: &Self::BufferElem, mix: &Self::ExtElem) {
         let count = output.size() / Self::ExtElem::EXT_SIZE;
         assert_eq!(output.size(), count * Self::ExtElem::EXT_SIZE);
@@ -545,7 +545,7 @@ impl Hal for CudaHal {
         stream.synchronize().unwrap();
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     fn sha_rows(&self, output: &Self::BufferDigest, matrix: &Self::BufferElem) {
         let row_size = output.size();
         let col_size = matrix.size() / output.size();

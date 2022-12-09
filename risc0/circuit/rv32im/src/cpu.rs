@@ -38,7 +38,7 @@ impl<'a, C: PolyFp<BabyBear>> CpuEvalCheck<'a, C> {
 }
 
 impl<'a, C: PolyFp<BabyBear> + Sync> EvalCheck<BabyBearCpuHal> for CpuEvalCheck<'a, C> {
-    #[tracing::instrument(skip_all)]
+    ////#[tracing::instrument(skip_all)]
     fn eval_check(
         &self,
         check: &CpuBuffer<BabyBearElem>,

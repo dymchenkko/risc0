@@ -253,7 +253,7 @@ mod host {
     }
 }
 
-#[tracing::instrument(skip_all)]
+//#[tracing::instrument(skip_all)]
 pub fn verify<'a, H, C, F>(
     hal: &'a H,
     circuit: &C,

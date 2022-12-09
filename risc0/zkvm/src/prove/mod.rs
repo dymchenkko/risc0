@@ -176,7 +176,7 @@ impl<'a> Prover<'a> {
         &self.inner.output
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     pub fn run(&mut self) -> Result<Receipt> {
         HAL.with(|(hal, eval)| {
             cfg_if::cfg_if! {
@@ -193,7 +193,7 @@ impl<'a> Prover<'a> {
         })
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     pub fn run_with_hal<H, E>(&mut self, hal: &H, eval: &E) -> Result<Receipt>
     where
         H: Hal<Elem = BabyBearElem, ExtElem = BabyBearExtElem>,

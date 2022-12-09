@@ -49,7 +49,7 @@ where
     circuit.execute(&mut iop);
 }
 
-#[tracing::instrument(skip_all)]
+//#[tracing::instrument(skip_all)]
 pub fn prove<'a, F, H, S, E, C, CS>(
     hal: &H,
     sha: &S,

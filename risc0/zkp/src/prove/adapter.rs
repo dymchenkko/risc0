@@ -73,7 +73,7 @@ where
     }
 
     /// Perform 'accumulate' stage, using the iop for any RNG state.
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     pub fn accumulate<S: Sha>(&mut self, iop: &mut WriteIOP<S>) {
         // Make the mixing values
         self.mix

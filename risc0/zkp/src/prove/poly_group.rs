@@ -57,7 +57,7 @@ pub struct PolyGroup<'a, H: Hal> {
 }
 
 impl<'a, H: Hal> PolyGroup<'a, H> {
-    #[tracing::instrument(name = "PolyGroup", skip_all, fields(name = _name))]
+    //#[tracing::instrument(name = "PolyGroup", skip_all, fields(name = _name))]
     pub fn new(
         hal: &H,
         coeffs: &'a H::BufferElem,

@@ -49,7 +49,7 @@ fn main() {
     );
 }
 
-#[tracing::instrument(skip_all)]
+//#[tracing::instrument(skip_all)]
 fn top<H, E>(hal: &H, eval: &E, iterations: u32) -> Receipt
 where
     H: Hal<Elem = BabyBearElem, ExtElem = BabyBearExtElem>,

@@ -353,7 +353,7 @@ impl Loader {
             + ZK_CYCLES
     }
 
-    #[tracing::instrument(skip_all)]
+    //#[tracing::instrument(skip_all)]
     pub fn load<F>(&self, start_addr: u32, step: F) -> Result<usize>
     where
         F: FnMut(&[BabyBearElem], usize) -> Result<bool>,
