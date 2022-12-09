@@ -12,7 +12,6 @@ bytemuck = "1.12"
 impl-trait-for-tuples = "0.2"
 log = "0.4"
 risc0-zeroio-derive = { version = "1.0.0-rc.2", path = "../zeroio_derive" }
-tracing = { version = "0.1", default-features = false, features = ["attributes"] }
 
 [target.'cfg(not(target_os = "zkvm"))'.dev-dependencies]
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
