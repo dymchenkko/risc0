@@ -120,14 +120,13 @@ where
         let po2 = po2 as usize;
         let which = po2 - MIN_CYCLES_PO2;
         if which >= control_id.table.len() {
-            eprintln!("which = {}", which);
-            eprintln!("control_id = {}", control_id.table.len());
-            return Err(VerificationError::ControlVerificationError);
+            return Err(VerificationError::ControlVerificationError {
+                idx: which,
+                rows: control_id.table.len(),
+            });
         }
         if control_id.table[which] != *merkle_root {
-            eprintln!("which = {:?}", control_id.table[which]);
-            eprintln!("control_id = {:?}", merkle_root);
-            return Err(VerificationError::ControlVerificationError);
+            return Err(VerificationError::ControlVerificationError { idx: 1, rows: 1 });
         }
         Ok(())
     };
