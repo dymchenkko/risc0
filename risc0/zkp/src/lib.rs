@@ -40,7 +40,7 @@ pub mod hal {
 
 pub use risc0_core::field;
 
-pub const MIN_CYCLES_PO2: usize = 11;
+pub const MIN_CYCLES_PO2: usize = 20;
 pub const MIN_CYCLES: usize = 1 << MIN_CYCLES_PO2; // 1K
 pub const MAX_CYCLES_PO2: usize = 33;
 pub const MAX_CYCLES: usize = 1 << MAX_CYCLES_PO2; // 16M
